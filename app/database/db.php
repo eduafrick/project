@@ -13,6 +13,7 @@ global $conn;
 
     $stmt = $conn->prepare($sql);
     $value = array_values($data);
+    
     $type = str_repeat('s', count($value));
     $stmt->bind_param($type, ...$value);
     $stmt->execute();
