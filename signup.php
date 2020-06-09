@@ -20,7 +20,7 @@ include(ROOT_PATH . '/app/controllers/users.php');
         <div class="address">
             <div class="label">
                 <label for="full-name">Full Name:&nbsp;
-                    <input type="text" name="full-name" id="full-name" class="text-input" placeholder="Full Name" value="<?php echo $full_name;?>">
+                    <input type="text" name="full_name" id="full_name" class="text-input" placeholder="Full Name" value="<?php echo $full_name;?>">
                     <span class="error">*<?php echo $error_full_name; echo "&nbsp;"; echo $error_full_name2;?></span>
                 </label>
             </div>

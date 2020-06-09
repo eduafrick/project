@@ -13,7 +13,6 @@ global $conn;
 
     $stmt = $conn->prepare($sql);
     $value = array_values($data);
-    
     $type = str_repeat('s', count($value));
     $stmt->bind_param($type, ...$value);
     $stmt->execute();
@@ -69,7 +68,7 @@ function selectOne($table, $conditions) {
     return $records;
     
 }
-
+/*
 function create($table, $data) {
     global $conn;
 
@@ -78,16 +77,57 @@ function create($table, $data) {
     foreach ($data as $key=>$value)
         {
         if ($i === 0) {
-            $sql = $sql . "$key=?";
+            $sql = $sql . "$key=" . "'" . "$value" . "'";
         } else {
-            $sql = $sql . ", $key=?";
+            $sql = $sql . ", $key=" . "'" . "$value" . "'";
         }
         $i++;   
     }
+    
+    $stmt = $conn->query($sql);
+    $SQL = "SELECT 'id' FROM $table WHERE ";
+    $id = $conn->query($SQL);
+    var_dump($id);dd($sql);
+     $stmt = executeQurey($sql, $data);
+    $id = $stmt->insert_id;
+    return $id;
+}*/
+
+function create($table, $data){
+    global $conn;
+
+    $sql = "INSERT INTO " . "`" . $table . "` (";
+    $i = 0;
+    foreach($data as $key=>$value){
+        if($i === 0){
+            $sql = $sql . $key;
+        }else {
+            $sql = $sql . ", " . $key;
+        }
+        $i++;
+    }
+    $sql = $sql . ") VALUES (";
+    $x = 0;
+    foreach ($data as $key=>$value) {
+        if($x === 0){
+        $sql = $sql . "?";
+        } else{
+            $sql = $sql . ", ?";
+        }
+        $x++;
+    }
+    $sql = $sql . ")";
+    
     $stmt = executeQurey($sql, $data);
     $id = $stmt->insert_id;
     return $id;
 }
+
+
+
+
+
+
 
 function update($table, $id, $data) {
     global $conn;

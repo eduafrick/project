@@ -8,14 +8,13 @@ $regexphone = "/^[\d]+$/";
 $lenght = strlen($user['password']);
 
 
-
 #FULLNAME VALIDATION
-if (empty($user['full-name'])) {
+if (empty($user['full_name'])) {
     $error_full_name = 'Full Name Required';
     $err++;
 } 
 
-if (!empty($user['full-name']) && !preg_match($regexname, $user['full-name'])) {
+if (!empty($user['full_name']) && !preg_match($regexname, $user['full_name'])) {
     $error_full_name2 = 'Full Name:Invalid Charaters';
     $err++;
 }
