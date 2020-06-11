@@ -2,6 +2,7 @@
 include('path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
+echo generateRandomString($email_vrification_code, 25);
 ?>
 
 <!DOCTYPE html>
