@@ -2,7 +2,6 @@
 include('path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
-echo generateRandomString($email_vrification_code, 25);
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +84,7 @@ echo generateRandomString($email_vrification_code, 25);
             <div class="label">
                 <label for="image">Image:&nbsp;
                     <input type="file" name="image" id="image" class="text-input" value="<?php echo $image;?>">
+                    <span class="error">*<?php echo $error_image; echo "&nbsp;"; echo $error_image2;?></span>
                 </label>
             </div>
             <div class="label">

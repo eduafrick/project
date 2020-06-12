@@ -10,10 +10,11 @@ function dd($value) { // to be deleted
 
 function executeQurey($sql, $data) {
 global $conn;
-
+ 
     $stmt = $conn->prepare($sql);
     $value = array_values($data);
     $type = str_repeat('s', count($value));
+   
     $stmt->bind_param($type, ...$value);
     $stmt->execute();
     return $stmt;
@@ -68,30 +69,39 @@ function selectOne($table, $conditions) {
     return $records;
     
 }
-/*
-function create($table, $data) {
-    global $conn;
 
-    $sql = "INSERT INTO $table SET ";
-    $i = 0;
-    foreach ($data as $key=>$value)
-        {
-        if ($i === 0) {
-            $sql = $sql . "$key=" . "'" . "$value" . "'";
-        } else {
-            $sql = $sql . ", $key=" . "'" . "$value" . "'";
+function selectAny($table, $conditions = []){
+    global $conn;
+    $sql = "SELECT * FROM $table";
+
+    if (count($conditions) === 1) {
+        $i = 0;
+        foreach($conditions as $key=>$value){
+            if($i === 0){
+                $sql = $sql . " WHERE $key= '$value'" . " LIMIT 1";
+            }
+            $i++;
         }
-        $i++;   
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $records = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $records;
+    }else{  
+        $i = 0;
+        foreach($conditions as $key=>$value){
+            if($i === 0){
+                $sql = $sql . " WHERE $key=?";
+            } else {
+                $sql = $sql . " OR $key=?";
+            }
+            $i++;
+        }
+        $sql = $sql . " LIMIT 1";
+        $stmt = executeQurey($sql, $conditions);
+        $records = $stmt->get_result()->fetch_assoc();
+        return $records;
     }
-    
-    $stmt = $conn->query($sql);
-    $SQL = "SELECT 'id' FROM $table WHERE ";
-    $id = $conn->query($SQL);
-    var_dump($id);dd($sql);
-     $stmt = executeQurey($sql, $data);
-    $id = $stmt->insert_id;
-    return $id;
-}*/
+}
 
 function create($table, $data){
     global $conn;
@@ -111,13 +121,12 @@ function create($table, $data){
     foreach ($data as $key=>$value) {
         if($x === 0){
         $sql = $sql . "?";
-        } else{
+        }else{
             $sql = $sql . ", ?";
         }
         $x++;
     }
     $sql = $sql . ")";
-    
     $stmt = executeQurey($sql, $data);
     $id = $stmt->insert_id;
     return $id;

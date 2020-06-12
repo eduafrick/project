@@ -6,11 +6,14 @@ $regexname = "/^[a-zA-Z\s.]{1}+[a-zA-Z\s]+$/";
 $regexpassword = "/^[a-zA-Z\d]+$/";
 $regexphone = "/^[\d]+$/";
 $lenght = strlen($user['password']);
+$exiting_email = selectAny($table, $email = array('email'=>$user['email']));
+$exiting_phone = selectAny($table, $phone = array('phone'=>$user['phone']));
+$exiting_username = selectAny($table, $username = array('username'=>$user['username']));
 
 
 #FULLNAME VALIDATION
 if (empty($user['full_name'])) {
-    $error_full_name = 'Full Name Required';
+    $error_full_name = ucwords('Full name Required');
     $err++;
 } 
 
@@ -25,7 +28,11 @@ if (empty($user['email'])) {
     $err++;
 }
 if (!empty($user['email']) && !preg_match($regexemail, $user['email'])) {
-    $error_email2 = 'Email:Invalid Charaters';
+    $error_email2 = ucwords('Email:Invalid Charaters');
+    $err++;
+}
+if($exiting_email){
+    $error_email = ucwords("Email already exists");
     $err++;
 }
 
@@ -38,10 +45,19 @@ if (!empty($user['phone']) && !preg_match($regexphone, $user['phone'])) {
     $error_phone2 = 'Phone:Invalid Charaters';
     $err++;
 }
+if($exiting_phone){
+    $error_phone = "Phone Number already exists";
+    $err++;
+}
 
 #USERNAME VALIDATION
 if (empty($user['username'])) {
     $error_username = 'Username Required';
+    $err++;
+}
+
+if($exiting_username){
+    $error_username = ucwords("Username already exists");
     $err++;
 }
 
@@ -56,13 +72,13 @@ if (!empty($user['password']) && !preg_match($regexpassword, $user['password']))
     $err++;
 }
 if ($lenght <= 8 || $lenght >= 16) {
-    $error_pass3 = 'Password Must contain 8 to 16 charaters';
+    $error_pass3 = ucwords('Password Must contain 8 to 16 charaters');
     $err++;
 }
     
 #CONFIRMATION PASSWORD VALIDATION
 if ($user['conpassword'] !== $user['password']) {
-    $error_passcon = 'Passwords do not match';
+    $error_passcon = ucwords('Passwords do not match');
     $err++;
 }
     
@@ -85,22 +101,22 @@ if (!empty($user['Country']) && !preg_match($regexname, $user['country'])) {
 
 #IMAGE VALIDATION //not working yet
 
-if ($_FILES['image']['name']) {
-    $image_name = time() . '_' . $_FILES['image']['name'];
-    $destination = ROOT_PATH . "/assets/images/" . $image_name;
-
-    $result = move_uploaded_file($_FILES['image']['tmp_name'], $destination);
-
-    if ($result) {
-        $_POST['image'] = $image_name;
-    } else {
-        $error_image =  'Failed To Upload Image';
+if (empty($_FILES['image']['name'])) {
+    $error_image2 =  'Post Image Required';
         $err++;
-        }   
-    } else {
-        $error_image2 =  'Post Image Required';
-        $err++;
-    }
+    }else {
+        $image_name = time() . '_' . $_FILES['image']['name'];
+        $destination = ROOT_PATH . "/assets/images/" . $image_name;
+
+        $result = move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+
+        if ($result) {
+            $_POST['image'] = $image_name;
+        } else {
+            $error_image =  'Failed To Upload Image';
+            $err++;
+            }
+        }
 
 
 ?>

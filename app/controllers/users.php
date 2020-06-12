@@ -20,10 +20,7 @@ $referal_code = '0123456789abcdefghijklmnopqrstuvwzyz';
 
 function generateRandomString($x, $lenght){
     return substr(
-        str_shuffle(str_repeat(
-                            $x, ceil($lenght/strlen($x)) 
-                            )
-                    ), 1,$lenght);
+        str_shuffle(str_repeat($x, ceil($lenght/strlen($x)))), 1,$lenght);
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -32,10 +29,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
        unset($_POST['sign-up'], $_POST['conpassword']);
        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $user_id = create($table, $_POST);
-           /*  $verify_id = selectOne($table, $user_id);
-            $codes = array('user_id'=>$user_id, 'email_code'=>generateRandomString($email_vrification_code, 25), 'phone_code'=>generateRandomString($phone_code, 7), 'referals_code'=>generateRandomString($referal_code, 6));
-            $code_insert = create('codes', $codes); */
-            echo "hello";
+        $codes = array('user_id'=>$user_id, 'email_code'=>generateRandomString($email_vrification_code, 25), 'phone_code'=>generateRandomString($phone_code, 7), 'referals_code'=>generateRandomString($referal_code, 6));
+        $code_insert = create('codes', $codes);
+        require(ROOT_PATH . '/app/helpers/mailers.php');
     }else{
         $_SESSION['message'] = "Hi";
         $_SESSION['type'] = "error";
