@@ -15,7 +15,6 @@ include(ROOT_PATH . '/app/controllers/users.php');
 </head>
 
 <body>
-<?php /* include(ROOT_PATH . '/app/includes/error.php') */?>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
         <div class="address">
             <div class="label">
@@ -103,7 +102,7 @@ include(ROOT_PATH . '/app/controllers/users.php');
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn-action btn" name="sign-up">Sign UP</button>
+        <button type="submit" class="btn-action btn" name="sign-up"  id="sign-up">Sign UP</button>
     </form>
     <div class="login">
         <span>Or <a href="./login.html">Login here</a></span>

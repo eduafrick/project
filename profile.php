@@ -1,3 +1,11 @@
+<?php 
+include('path.php');
+include(ROOT_PATH . '/app/database/db.php');
+include(ROOT_PATH . '/app/controllers/users.php');
+
+$user = selectOne('users', 21);
+dd($user);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +21,7 @@
         <div class="id">
             <div class="profile_image">
                 <img src="./images/giu-vicente-FMArg2k3qOU-unsplash.jpg" alt="profile_image">
-                <span>Lorem ipsum dolor sit amet.</span>
+                <span><?php echo $user['full_name']?>.</span>
             </div>
             <div class="id_name">
                 <ul>

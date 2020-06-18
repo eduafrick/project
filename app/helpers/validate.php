@@ -71,5 +71,32 @@ function validate($user) {
     return $errors;
 }
 
+$err = 0;
+$user = $_POST;
+$regexemail = "/^[a-zA-Z\d\._]+@[a-zA-Z\d\.]+$/";
+$regexname = "/^[a-zA-Z\s.]{1}+[a-zA-Z\s]+$/";
+$regexpassword = "/^[a-zA-Z\d]+$/";
+$regexphone = "/^[\d]+$/";
+$lenght = strlen($user['password']);
+
+#EMAIL VALIDATION
+if (empty($user['logad'])) {
+    $error_logad = ucwords('Filled Must not be Empty');
+    $err++;
+}
+
+#PASSWORD VALIDATION
+if (empty($user['password'])) {
+    $error_pass = 'Password Required';
+    $err++;
+}
+if (!empty($user['password']) && !preg_match($regexpassword, $user['password'])) {
+    $error_pass2 = 'Password:Invalid Charaters';
+    $err++;
+}
+if ($lenght <= 8 || $lenght >= 16) {
+    $error_pass3 = ucwords('Password Must contain 8 to 16 charaters');
+    $err++;
+}
 
 ?>
