@@ -31,7 +31,7 @@ if (!empty($user['email']) && !preg_match($regexemail, $user['email'])) {
     $error_email2 = ucwords('Email:Invalid Charaters');
     $err++;
 }
-if($exiting_email){
+if((isset($_GET['id'])) && $exiting_email){
     $error_email = ucwords("Email already exists");
     $err++;
 }
@@ -45,7 +45,7 @@ if (!empty($user['phone']) && !preg_match($regexphone, $user['phone'])) {
     $error_phone2 = 'Phone:Invalid Charaters';
     $err++;
 }
-if($exiting_phone){
+if((isset($_GET['id'])) && $exiting_phone){
     $error_phone = "Phone Number already exists";
     $err++;
 }
@@ -56,7 +56,7 @@ if (empty($user['username'])) {
     $err++;
 }
 
-if($exiting_username){
+if((isset($_GET['id'])) && $exiting_username){
     $error_username = ucwords("Username already exists");
     $err++;
 }

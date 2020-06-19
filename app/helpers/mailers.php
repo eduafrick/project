@@ -1,8 +1,4 @@
-<?php 
-include('../../path.php');
-include(ROOT_PATH . '/app/database/db.php');
-$user_id = 18;
-$table = 'users';
+<?php
 $user_ide = selectOne($table, ['id' => $user_id]);
 $user_code = selectOne('codes', ['user_id' => $user_id]);
 $to = $user_ide['email'];
@@ -23,7 +19,6 @@ a{padding: 2em;
 </body>
 </html>
 ";
-echo $message;
 // Always set content-type when sending HTML email
 $headers = "MIME-Version: 1.0" . "\r\n";
 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";

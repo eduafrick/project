@@ -3,6 +3,9 @@
 session_start();
 require('connect.php');
 
+#DECLARING LONG GLOBAL VARIABLE FOR EASY REFERENCE
+$s = $_SESSION;
+
 function dd($value) { // to be deleted
     echo "<pre>", print_r($value, true), "</pre>";
     die();
@@ -131,12 +134,6 @@ function create($table, $data){
     $id = $stmt->insert_id;
     return $id;
 }
-
-
-
-
-
-
 
 function update($table, $id, $data) {
     global $conn;

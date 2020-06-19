@@ -17,6 +17,7 @@ $table = "users";
 $phone_code = '0123456789';
 $email_vrification_code = 'abcdefghijklmnopqrstuvwzyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $referal_code = '0123456789abcdefghijklmnopqrstuvwzyz';
+$user_key = $phone_code . $email_vrification_code;
 
 
 function generateRandomString($x, $lenght){
@@ -25,7 +26,9 @@ function generateRandomString($x, $lenght){
 }
 
 function loginUser($user) {
-    foreach($user as $key){
+    $un_code = selectOne('codes', ['user_id'=>$user['id']]);
+    $_SESSION['un_code'] = $un_code['user_key'];
+    foreach($user as $key => $value){
         $_SESSION[$key] = $user[$key];
     }
     unset($_SESSION['password']);
@@ -44,16 +47,18 @@ function loginUser($user) {
 if(isset($_POST['sign-up'])){
     require(ROOT_PATH . '/app/helpers/validation.php');
     if ($err === 0) {
-       unset($_POST['sign-up'], $_POST['conpassword']);
+       unset($_POST['sign-up'], $_POST['conpassword'], $_POST['agree'], $_POST['policy']);
        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $user_id = create($table, $_POST);
-        $codes = array('user_id'=>$user_id, 'email_code'=>generateRandomString($email_vrification_code, 25), 'phone_code'=>generateRandomString($phone_code, 7), 'referals_code'=>generateRandomString($referal_code, 6));
+        $codes = array('user_id'=>$user_id, 'email_code'=>generateRandomString($email_vrification_code, 25), 'phone_code'=>generateRandomString($phone_code, 7), 'referals_code'=>generateRandomString($referal_code, 6), 'user_key'=>generateRandomString($user_key, 30));
         $code_insert = create('codes', $codes);
         require(ROOT_PATH . '/app/helpers/mailers.php');
         $_SESSION['id'] = $user_id;
-        header('location:' . BASE_URL . '/profile.php');
+        $user = selectOne($table, ['id' => $user_id]);
+        #LOG USER IN
+        loginUser($user);
     }else{
-        $_SESSION['message'] = ucwords("ERROR in singing in please make sure you input correct data.");
+        $_SESSION['message'] = ucwords("error in singing in please make sure you input correct data.");
         $_SESSION['type'] = "error";
         $full_name = $_POST['full_name'];
         $email = $_POST['email'];
@@ -87,6 +92,52 @@ if (isset($_POST['login-btn'])) {
     $username = $_POST['logad'];
     $password = $_POST['password'];
     }
+}
+
+if (isset($_GET['id'])) {
+    $user = selectOne($table, ['id' => $_GET['id']]);
+    $full_name = $user['full_name'];
+    $email = $user['email'];
+    $phone = $user['phone'];
+    $username = $user['username'];
+    $address = $user['address'];
+    $address2 = $user['address2'];
+    $country = $user['country'];
+    $age =  $user['age'];
+    $image =  $user['image'];
+    $fb_link = $user['fb_link'];
+    $ref =  $user['ref'];
+}
+
+if (isset($_POST['update'])) {
+    #require(ROOT_PATH . '/app/helpers/validation.php');
+    $err = 0;
+    if ($err === 0) {
+        unset($_POST['update'], $_POST['conpassword']);
+        
+        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        
+        $user_id = update($table, $s['id'], $_POST);
+        $_SESSION['message'] = 'User updated successfuly';
+        $_SESSION['type'] = 'success';
+        header('location: ' . BASE_URL . '/admin/users/index.php');
+        exit();  
+    } else {
+        $user = $_POST;
+        $full_name = $user['full_name'];
+        $email = $user['email'];
+        $phone = $user['phone'];
+        $username = $user['username'];
+        $address = $user['address'];
+        $address2 = $user['address2'];
+        $country = $user['country'];
+        $age =  $user['age'];
+        $fb_link = $user['fb_link'];
+        $ref =  $user['ref'];
+        $password = $_POST['password'];
+        $conpassword = $_POST['conpassword'];
+    }
+    
 }
 
 ?>

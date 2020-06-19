@@ -1,14 +1,16 @@
 <?php 
+#INCLUDING THE NECESSARY FILES
 include('path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
-$s = $_SESSION;
+
+if($s['verified'])
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title><?php echo $s['username']?>-Profile</title>
+    <title><?php echo $s['full_name']?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="assets/css/style.css" rel="stylesheet">
@@ -17,9 +19,11 @@ $s = $_SESSION;
 <body>
 <?php include(ROOT_PATH . '/app/includes/messages.php');?>
     <div class="container">
+        <a href="./logout.php">Logout</a>
+        <a href="edit_profile.php?id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Edit Profile</a>
         <div class="id">
             <div class="profile_image">
-                <img src="./images/giu-vicente-FMArg2k3qOU-unsplash.jpg" alt="profile_image">
+                <img src="<?php echo BASE_URL . '/assets/images/' . $s['image']; ?>" alt="profile_image">
                 <span><?php echo $s['full_name']?>.</span>
             </div>
             <div class="id_name">
