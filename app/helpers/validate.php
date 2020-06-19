@@ -70,7 +70,7 @@ function validate($user) {
         
     return $errors;
 }
-
+#login validation is been done seprately form general validation
 $err = 0;
 $user = $_POST;
 $regexemail = "/^[a-zA-Z\d\._]+@[a-zA-Z\d\.]+$/";

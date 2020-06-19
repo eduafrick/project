@@ -1,5 +1,5 @@
 <?php
-
+#SIGN-UP $_POST VARIABLES DECLARATION
 $full_name = $email = $phone = "";
 $username = $password = $conpassword = $address = $address2 = $country = "";
 $age =  $fb_link = $ref =  $user_id = "";
@@ -10,6 +10,7 @@ $error_address = $error_con = $error_con2 = $error_email = $error_email2 = "";
 $error_username = $error_full_name2 = $error_pass = $error_pass2 = $error_pass3 = "";
 $error_phone = $error_phone2 = $error_passcon = $error_image =  $error_image2 =   "";
 
+#CONSTANT REUSABLE VARIABLES
 $table = "users";
 
 #CODE GENERATION VARIABLES
@@ -24,18 +25,20 @@ function generateRandomString($x, $lenght){
 }
 
 function loginUser($user) {
-    $_SESSION['id'] = $user['id'];
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['admin'] = $user['admin'];
-    $_SESSION['email'] = $user['email'];
+    foreach($user as $key){
+        $_SESSION[$key] = $user[$key];
+    }
+    unset($_SESSION['password']);
     $_SESSION['message'] = 'You are now Logged In';
     $_SESSION['type'] = 'success';
-if ($_SESSION['admin']) {
-    header('location:' . BASE_URL . '/admin/dashboard.php');
-} else {
-    header('location:' . BASE_URL . '/profile.php');
-}
-    exit();
+    if ($_SESSION['admin']) {
+        header('location:' . BASE_URL . '/admin/dashboard.php');
+        exit();
+    }else {
+        header('location:' . BASE_URL . '/profile.php');
+        exit();
+    }
+        
 }
 
 if(isset($_POST['sign-up'])){
@@ -50,7 +53,7 @@ if(isset($_POST['sign-up'])){
         $_SESSION['id'] = $user_id;
         header('location:' . BASE_URL . '/profile.php');
     }else{
-        $_SESSION['message'] = "Hi";
+        $_SESSION['message'] = ucwords("ERROR in singing in please make sure you input correct data.");
         $_SESSION['type'] = "error";
         $full_name = $_POST['full_name'];
         $email = $_POST['email'];
@@ -68,7 +71,9 @@ if(isset($_POST['sign-up'])){
 }
 
 if (isset($_POST['login-btn'])) {
+    #VALIDATION OF $_POST VALUES
     require(ROOT_PATH . '/app/helpers/validate.php');
+    #IF NO ERROR
     if($err === 0){
         $user = selectAny($table, ['username' => $_POST['logad'], 'email' => $_POST['logad']]);
         if ($user && password_verify($_POST['password'], $user['password'])) {

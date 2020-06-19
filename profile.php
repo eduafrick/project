@@ -2,34 +2,33 @@
 include('path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
-
-$user = selectOne('users', 21);
-dd($user);
+$s = $_SESSION;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Ugochukwu-Profile</title>
+    <title><?php echo $s['username']?>-Profile</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
+<?php include(ROOT_PATH . '/app/includes/messages.php');?>
     <div class="container">
         <div class="id">
             <div class="profile_image">
                 <img src="./images/giu-vicente-FMArg2k3qOU-unsplash.jpg" alt="profile_image">
-                <span><?php echo $user['full_name']?>.</span>
+                <span><?php echo $s['full_name']?>.</span>
             </div>
             <div class="id_name">
                 <ul>
-                    <li><span class="list">Name:</span>&nbsp;<span class="list_text">Lorem, ipsum dolor.</span></li>
-                    <li><span class="list">Email:</span>&nbsp;<span class="list_text">loremipsum@gmail.com</span></li>
-                    <li><span class="list">Username:</span>&nbsp;<span class="list_text">Lorem, ipsum dolor.</span></li>
-                    <li><span class="list">Phone Number:</span>&nbsp;<span class="list_text">Lorem, ipsum dolor.</span></li>
-                    <li><span class="list">Country:</span>&nbsp;<span class="list_text">Nigeria</span></li>
+                    <li><span class="list">Name:</span>&nbsp;<span class="list_text"><?php echo $s['full_name']?></span></li>
+                    <li><span class="list">Email:</span>&nbsp;<span class="list_text"><?php echo $s['email']?></span></li>
+                    <li><span class="list">Username:</span>&nbsp;<span class="list_text"><?php echo $s['username']?></span></li>
+                    <li><span class="list">Phone Number:</span>&nbsp;<span class="list_text"><?php echo $s['phone']?></span></li>
+                    <li><span class="list">Country:</span>&nbsp;<span class="list_text"><?php echo $s['country']?></span></li>
                 </ul>
             </div>
         </div>
