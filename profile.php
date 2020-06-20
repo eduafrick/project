@@ -4,7 +4,11 @@ include('path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
 
-if($s['verified'])
+function checkVerification($each){
+    if($each == false){
+        echo '<a href="' . BASE_URL . "/app/helpers/verify.php?verify_phone_id=" . $_SESSION['id'] . '">' . ucwords('verify') . "</a>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +25,7 @@ if($s['verified'])
     <div class="container">
         <a href="./logout.php">Logout</a>
         <a href="edit_profile.php?id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Edit Profile</a>
+        <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>?del_id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Delete Account</a>
         <div class="id">
             <div class="profile_image">
                 <img src="<?php echo BASE_URL . '/assets/images/' . $s['image']; ?>" alt="profile_image">
@@ -29,9 +34,9 @@ if($s['verified'])
             <div class="id_name">
                 <ul>
                     <li><span class="list">Name:</span>&nbsp;<span class="list_text"><?php echo $s['full_name']?></span></li>
-                    <li><span class="list">Email:</span>&nbsp;<span class="list_text"><?php echo $s['email']?></span></li>
+                    <li><span class="list">Email:</span>&nbsp;<span class="list_text"><?php echo $s['email']?></span><?php checkVerification($s['verified_phone']);?></li>
                     <li><span class="list">Username:</span>&nbsp;<span class="list_text"><?php echo $s['username']?></span></li>
-                    <li><span class="list">Phone Number:</span>&nbsp;<span class="list_text"><?php echo $s['phone']?></span></li>
+                    <li><span class="list">Phone Number:</span>&nbsp;<span class="list_text"><?php echo $s['phone']?></span><?php checkVerification($s['verified_phone']);?></li>
                     <li><span class="list">Country:</span>&nbsp;<span class="list_text"><?php echo $s['country']?></span></li>
                 </ul>
             </div>

@@ -155,5 +155,19 @@ if (isset($_POST['update'])) {
     }
     
 }
+if((isset($_GET['del_id'])) && (isset($_GET['key']))){
+    notLogin($s['id']);
+    if(($_GET['del_id'] == $s['id']) && ($_GET['key'] == $s['un_code'])){
+        $count = delete($table, $_GET['del_id']);
+        $_SESSION['message'] = 'User Deleted successfuly';
+        $_SESSION['type'] = 'success';
+        header('location: ' . BASE_URL . '/index.php');
+        exit();  
+    }else{
+        header('location: ' . BASE_URL . '/404.php');
+        exit(); 
+    }
+     
+}
 
 ?>

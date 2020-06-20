@@ -1,3 +1,6 @@
+<?php 
+include('path.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +9,7 @@
     <title>Home</title>
 </head>
 <body>
+<?php include(ROOT_PATH . '/app/includes/messages.php');?>
     <a href="./signup.php">Sign Up</a>
     <a href="./login.php">Login</a>
 </body>
