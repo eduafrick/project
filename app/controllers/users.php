@@ -1,4 +1,6 @@
 <?php
+include(ROOT_PATH . '/app/helpers/middleware.php');
+
 #SIGN-UP $_POST VARIABLES DECLARATION
 $full_name = $email = $phone = "";
 $username = $password = $conpassword = $address = $address2 = $country = "";
@@ -25,12 +27,16 @@ function generateRandomString($x, $lenght){
         str_shuffle(str_repeat($x, ceil($lenght/strlen($x)))), 1,$lenght);
 }
 
+function sessionDeclar($data = []){
+    foreach($data as $key => $value){
+        $_SESSION[$key] = $data[$key];
+    }
+}
+
 function loginUser($user) {
     $un_code = selectOne('codes', ['user_id'=>$user['id']]);
     $_SESSION['un_code'] = $un_code['user_key'];
-    foreach($user as $key => $value){
-        $_SESSION[$key] = $user[$key];
-    }
+    sessionDeclar($user);
     unset($_SESSION['password']);
     $_SESSION['message'] = 'You are now Logged In';
     $_SESSION['type'] = 'success';
@@ -94,33 +100,43 @@ if (isset($_POST['login-btn'])) {
     }
 }
 
-if (isset($_GET['id'])) {
-    $user = selectOne($table, ['id' => $_GET['id']]);
-    $full_name = $user['full_name'];
-    $email = $user['email'];
-    $phone = $user['phone'];
-    $username = $user['username'];
-    $address = $user['address'];
-    $address2 = $user['address2'];
-    $country = $user['country'];
-    $age =  $user['age'];
-    $image =  $user['image'];
-    $fb_link = $user['fb_link'];
-    $ref =  $user['ref'];
+if (isset($_GET['id']) && isset($_GET['key'])) {
+    notLogin($s['id']);
+    if(($_GET['id'] == $s['id']) && ($_GET['key'] == $s['un_code'])){
+            $user = selectOne($table, ['id' => $_GET['id']]);
+            $full_name = $user['full_name'];
+            $email = $user['email'];
+            $phone = $user['phone'];
+            $username = $user['username'];
+            $address = $user['address'];
+            $address2 = $user['address2'];
+            $country = $user['country'];
+            $age =  $user['age'];
+            $image =  $user['image'];
+            $fb_link = $user['fb_link'];
+            $ref =  $user['ref'];
+        }else{
+            header('location:' . BASE_URL . '/404.php');
+            exit();
+        }
+    
 }
 
 if (isset($_POST['update'])) {
+    notLogin($s['id']);
     #require(ROOT_PATH . '/app/helpers/validation.php');
     $err = 0;
     if ($err === 0) {
-        unset($_POST['update'], $_POST['conpassword']);
+        unset($_POST['update'], $_POST['conpassword'], $_POST['id']);
         
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        
+        /* dd($_POST); */
         $user_id = update($table, $s['id'], $_POST);
-        $_SESSION['message'] = 'User updated successfuly';
+        $user = selectOne($table, ['id' => $s['id']]);
+        sessionDeclar($user);
+        $_SESSION['message'] = 'User updated sucessfully';
         $_SESSION['type'] = 'success';
-        header('location: ' . BASE_URL . '/admin/users/index.php');
+        header('location: ' . BASE_URL . '/profile.php');
         exit();  
     } else {
         $user = $_POST;

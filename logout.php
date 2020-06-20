@@ -1,10 +1,10 @@
 <?php 
 include('path.php');
-session_start();
-
-unset($_SESSION['id']);
-unset($_SESSION['username']);
-unset($_SESSION['admin']);
+include(ROOT_PATH . '/app/database/db.php');
+$userr = selectOne('users', ['id' => $s['id']]);
+foreach($userr as $key => $value){
+    unset($_SESSION[$key]);
+}
 unset($_SESSION['message']);
 unset($_SESSION['type']);
 session_destroy();
