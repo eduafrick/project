@@ -12,5 +12,6 @@ include('path.php');
 <?php include(ROOT_PATH . '/app/includes/messages.php');?>
     <a href="./bridge.php?action=signup">Sign Up</a>
     <a href="./bridge.php?action=login">Login</a>
+    <a href="admin/index.php">Admin Login</a>
 </body>
 </html>

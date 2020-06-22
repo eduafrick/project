@@ -47,14 +47,23 @@ function loginUser($user) {
     if ($_SESSION['role'] = "teachers") {
         header('location:' . BASE_URL . '/teachers/dashboard.php');
         exit();
-    }else {
+    }else{
         header('location:' . BASE_URL . '/student/profile.php');
         exit();
-    }
-        
+    }     
 }
 
-if($_GET['role'] = 'teacher'){
+function loginAdminUser($user){
+    sessionDeclar($user);
+    unset($_SESSION['password']);
+    $_SESSION['message'] = 'You are now Logged In';
+    $_SESSION['type'] = 'success';
+    $_SESSION['admin'] = 'Admin';
+    header('location:' . BASE_URL . '/admin/dashboard.php');
+    exit();
+}
+
+if(isset($_GET['role']) === 'teacher'){
     $table = "teachers";
     $table_code = "teachers_codes";
 }
@@ -177,6 +186,51 @@ if((isset($_GET['del_id'])) && (isset($_GET['key']))){
         exit(); 
     }
      
+}
+
+if(isset($_POST['admin-btn'])){
+    $table = "admin";
+    #VALIDATION OF $_POST VALUES
+    require(ROOT_PATH . '/app/helpers/validate.php');
+    #IF NO ERROR
+    if($err === 0){
+        $user = selectAny($table, ['username' => $_POST['logad'], 'email' => $_POST['logad']]);
+        
+        if ($user && password_verify($_POST['password'], $user['password'])) {
+        // login and redirect
+        loginAdminUser($user);
+        }else {
+            $login_error = 'Invalid Credentials';
+            $username = $_POST['logad'];
+        }
+    }else {
+    $username = $_POST['logad'];
+    $password = $_POST['password'];
+    }
+}
+
+if(isset($_POST['admin-sign-up'])){
+    $table = "admin";
+     #VALIDATION OF $_POST VALUES
+     require(ROOT_PATH . '/app/helpers/validate_admin.php');
+    if ($err === 0) {
+       unset($_POST['admin-sign-up'], $_POST['conpassword']);
+        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $_POST['created_by'] = $s['id'];
+        $user_id = create($table, $_POST);
+        dd($_POST);
+        header('location: ' . BASE_URL . '/admin/users/index.php');
+        exit(); 
+    }else{
+        $_SESSION['message'] = ucwords("error in singing in please make sure you input correct data.");
+        $_SESSION['type'] = "error";
+        $full_name = $_POST['full_name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $conpassword = $_POST['conpassword'];
+        }
 }
 
 ?>
