@@ -1,12 +1,12 @@
 <?php 
 #INCLUDING THE NECESSARY FILES
-include('path.php');
+include('../path.php');
 include(ROOT_PATH . '/app/database/db.php');
 include(ROOT_PATH . '/app/controllers/users.php');
 
 function checkVerification($each){
     if($each == false){
-        echo '<a href="' . BASE_URL . "/app/helpers/verify.php?verify_phone_id=" . $_SESSION['id'] . '">' . ucwords('verify') . "</a>";
+        echo '<button onclick="display()" class="btn">Verify</button>';
     }
 }
 ?>
@@ -17,14 +17,24 @@ function checkVerification($each){
     <title><?php echo $s['full_name']?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL;?>/assets/css/style.css" rel="stylesheet">
+    <script src="<?php echo BASE_URL;?>/assets/js/script.js"></script>
 </head>
 
 <body>
 <?php include(ROOT_PATH . '/app/includes/messages.php');?>
+<div class="phone" id="phone">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+    <input type="hidden" name="verify_phone_id" id="verify_phone_id" value="<?php echo $s['id'];?>">
+        <div>
+            <input type="number" class="text-input" name="code" id="code" placeholder="1234567...">
+        </div>
+        <button class="text-input" name="verify" id="verify">Verify</button>
+    </form>
+</div>
     <div class="container">
         <a href="./logout.php">Logout</a>
-        <a href="edit_profile.php?id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Edit Profile</a>
+        <a href="<?php echo BASE_URL;?>/edit_profile.php?id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Edit Profile</a>
         <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>?del_id=<?php echo $s['id'] . "&key=" . $s['un_code']; ?>" class="edit">Delete Account</a>
         <div class="id">
             <div class="profile_image">

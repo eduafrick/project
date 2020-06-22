@@ -10,7 +10,7 @@ include('path.php');
 </head>
 <body>
 <?php include(ROOT_PATH . '/app/includes/messages.php');?>
-    <a href="./signup.php">Sign Up</a>
-    <a href="./login.php">Login</a>
+    <a href="./bridge.php?action=signup">Sign Up</a>
+    <a href="./bridge.php?action=login">Login</a>
 </body>
 </html>

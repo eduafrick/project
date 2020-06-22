@@ -14,6 +14,7 @@ $error_phone = $error_phone2 = $error_passcon = $error_image =  $error_image2 = 
 
 #CONSTANT REUSABLE VARIABLES
 $table = "users";
+$table_code = "codes";
 
 #CODE GENERATION VARIABLES
 $phone_code = '0123456789';
@@ -34,20 +35,28 @@ function sessionDeclar($data = []){
 }
 
 function loginUser($user) {
-    $un_code = selectOne('codes', ['user_id'=>$user['id']]);
+    global $table_code;
+    global $table;
+    $un_code = selectOne($table_code, ['user_id'=>$user['id']]);
     $_SESSION['un_code'] = $un_code['user_key'];
     sessionDeclar($user);
     unset($_SESSION['password']);
     $_SESSION['message'] = 'You are now Logged In';
     $_SESSION['type'] = 'success';
-    if ($_SESSION['admin']) {
-        header('location:' . BASE_URL . '/admin/dashboard.php');
+    $_SESSION['role'] = $table;
+    if ($_SESSION['role'] = "teachers") {
+        header('location:' . BASE_URL . '/teachers/dashboard.php');
         exit();
     }else {
-        header('location:' . BASE_URL . '/profile.php');
+        header('location:' . BASE_URL . '/student/profile.php');
         exit();
     }
         
+}
+
+if($_GET['role'] = 'teacher'){
+    $table = "teachers";
+    $table_code = "teachers_codes";
 }
 
 if(isset($_POST['sign-up'])){
@@ -57,7 +66,7 @@ if(isset($_POST['sign-up'])){
        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $user_id = create($table, $_POST);
         $codes = array('user_id'=>$user_id, 'email_code'=>generateRandomString($email_vrification_code, 25), 'phone_code'=>generateRandomString($phone_code, 7), 'referals_code'=>generateRandomString($referal_code, 6), 'user_key'=>generateRandomString($user_key, 30));
-        $code_insert = create('codes', $codes);
+        $code_insert = create($table_code, $codes);
         require(ROOT_PATH . '/app/helpers/mailers.php');
         $_SESSION['id'] = $user_id;
         $user = selectOne($table, ['id' => $user_id]);

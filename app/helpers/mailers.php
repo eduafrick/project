@@ -15,7 +15,7 @@ a{padding: 2em;
 <title>Verify Your email</title>
 </head>
 <body>
-<a href=" . BASE_URL . "/app/helpers/verify.php?id=" .  $user_code['user_id'] ."&email_code=" . $user_code['email_code'] . " class='verify-btn'>Verify</a>
+<a href=" . BASE_URL . "/app/helpers/verify.php?email_id=" .  $user_code['user_id'] ."&email_code=" . $user_code['email_code'] . " class='verify-btn'>Verify</a>
 </body>
 </html>
 ";
