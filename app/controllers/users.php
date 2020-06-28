@@ -217,7 +217,11 @@ if(isset($_POST['admin-sign-up'])){
        unset($_POST['admin-sign-up'], $_POST['conpassword']);
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $_POST['created_by'] = $s['id'];
+        /* foreach ($_POST as $key => $value){
+            $_POST[$key] = "`" . $value . "`";
+        } */
         $user_id = create($table, $_POST);
+        echo $user_id . $table;
         dd($_POST);
         header('location: ' . BASE_URL . '/admin/users/index.php');
         exit(); 

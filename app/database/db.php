@@ -135,6 +135,25 @@ function create($table, $data){
     return $id;
 }
 
+function createi($table, $data) {
+    global $conn;
+
+    $sql = "INSERT INTO $table SET ";
+    $i = 0;
+    foreach ($data as $key=>$value)
+        {
+        if ($i === 0) {
+            $sql = $sql . "$key=?";
+        } else {
+            $sql = $sql . ", $key=?";
+        }
+        $i++;   
+    }
+    $stmt = executeQurey($sql, $data);
+    $id = $stmt->insert_id;
+    return $id;
+}
+
 function update($table, $id, $data) {
     global $conn;
 
