@@ -23,9 +23,8 @@ $referal_code = '0123456789abcdefghijklmnopqrstuvwzyz';
 $user_key = $phone_code . $email_vrification_code;
 
 
-function generateRandomString($x, $lenght){
-    return substr(
-        str_shuffle(str_repeat($x, ceil($lenght/strlen($x)))), 1,$lenght);
+function generateRandomString($string, $lenght){
+    return substr(str_shuffle(str_repeat($string, ceil($lenght/strlen($string)))), 1,$lenght);
 }
 
 function sessionDeclar($data = []){
